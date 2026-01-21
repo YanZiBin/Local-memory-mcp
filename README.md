@@ -104,6 +104,37 @@ Since this server uses heavy local models, we recommend the **Manual Start (SSE 
     > "Save this memory: My project uses Python 3.10."
     > "Search my memories for 'project'."
 
+### 🗺️ Roadmap
+
+We are currently at **Phase 2 (Persistence)**.
+
+- [x] **Phase 1: Prototype**
+    - Initialize MCP server with `fastmcp`.
+    - Basic in-memory storage (dict).
+    - Implement basic `save_memory` & `search_memory` (keyword matching).
+    - Manual connection testing with Gemini CLI.
+
+- [x] **Phase 2: Persistence (Current)**
+    - [x] Integrate **SQLite FTS5** and **LanceDB**.
+    - [x] Integrate local **ONNX embedding model**.
+    - [x] Dual-storage architecture (Full-text + Vector).
+    - [x] `list_memories` and `delete_memory` tools.
+
+- [ ] **Phase 3: Intelligent Retrieval**
+    - [ ] Implement **RRF (Reciprocal Rank Fusion)** algorithm.
+    - [ ] Add similarity thresholds & Top-K limits.
+    - [ ] Implement **Contextual Retrieval** (Enhanced context storage).
+    - [ ] (Optional) Add Reranker for higher precision.
+
+- [ ] **Phase 4: Memory Management**
+    - [ ] Lifecycle management (Clustering deduplication, Time decay, Conflict tagging).
+    - [ ] Support **Channels** (Switching memory context by Git branch).
+
+- [ ] **Phase 5: Advanced Optimization**
+    - [ ] Pre-storage summarization/deduplication using local LLM (e.g., Ollama).
+    - [ ] Expose **Resources**: Project summaries, ADR (Architecture Decision Records) guardrails.
+    - [ ] Architectural guardrails (Recall ADRs on violation) & Task chain tracking.
+
 ---
 
 <a name="chinese"></a>
@@ -205,6 +236,37 @@ pip install fastmcp lancedb onnxruntime-gpu transformers numpy uvicorn
     打开 Gemini CLI，直接对话：
     > “帮我记住：我的项目运行在 Python 3.10 环境下。”
     > “搜索记忆：关于项目环境的信息。”
+
+### 🗺️ 开发路线图 (Roadmap)
+
+目前项目处于 **第二阶段：持久化**。
+
+- [x] **第一阶段：原型验证**
+    - 使用 `fastmcp` 初始化 MCP 服务器。
+    - 使用内存字典进行临时存储。
+    - 实现基础的 `save_memory` 和 `search_memory`（关键词匹配）。
+    - 配置 stdio 并在 Gemini CLI 中测试手动连接。
+
+- [x] **第二阶段：持久化存储 (当前阶段)**
+    - [x] 引入 **SQLite FTS5** 和 **LanceDB**。
+    - [x] 集成本地 **ONNX 嵌入模型** 生成向量。
+    - [x] 实现双库存储（全文 + 向量）。
+    - [x] 新增 `list_memories`（列出记忆）和 `delete_memory`（删除记忆）工具。
+
+- [ ] **第三阶段：智能筛选**
+    - [ ] 实现 **RRF (倒数排名融合)** 算法。
+    - [ ] 增加相似度阈值和 Top-K 限制（默认 3-5）。
+    - [ ] 实现 **Contextual Retrieval**（增强文本存储）。
+    - [ ] （可选）加入 Reranker 重排序模型以提升精度。
+
+- [ ] **第四阶段：记忆管理**
+    - [ ] 实现生命周期管理（基于相似度的聚类去重、时间衰减、冲突标记）。
+    - [ ] 支持按 **Git 分支** 切换记忆频道（Channels）。
+
+- [ ] **第五阶段：高级优化**
+    - [ ] 使用规则或本地 LLM（如 Ollama）实现存储前的摘要/去重。
+    - [ ] 暴露 **Resources**（资源）：项目摘要、ADR 架构决策记录守栏等。
+    - [ ] 实现架构守栏（违规时自动召回 ADR）和任务链跟踪。
 
 ---
 
