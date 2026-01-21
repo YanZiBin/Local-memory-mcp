@@ -45,7 +45,7 @@ This is a **Memory Context Protocol (MCP)** server that gives your AI (like Gemi
 #### 1. Clone the Repository
 ```bash
 git clone https://github.com/YanZiBin/Local-memory-mcp.git
-cd local-memory-mcp
+cd Local-memory-mcp
 ```
 
 #### 2. Create a Python Environment (Conda Recommended)
@@ -178,7 +178,7 @@ We are currently at **Phase 2 (Persistence)**.
 #### 1. 克隆项目
 ```bash
 git clone https://github.com/YanZiBin/Local-memory-mcp.git
-cd local-memory-mcp
+cd Local-memory-mcp
 ```
 
 #### 2. 创建 Python 环境 (强烈推荐 Conda)
