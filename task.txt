@@ -1,0 +1,29 @@
+1. 原型阶段
+   - 初始化MCP服务器项目（用fastmcp快速搭建）
+   - 用内存dict临时存储
+   - 实现最基本的save_memory和search_memory工具（关键词匹配）
+   - 配置stdio并在Gemini CLI中测试手动触发连接
+
+2. 持久化阶段
+   - 引入SQLite FTS5和LanceDB
+   - 集成本地ONNX嵌入模型生成向量
+   - save_memory：切块 → 可选简单背景描述 → 双库存储
+   - search_memory：分别做全文和向量检索
+   - 列出所有记忆
+   - 删除记忆
+
+3. 智能筛选阶段
+   - 实现RRF融合算法
+   - 加相似度阈值、Top-K限制（默认3-5）
+   - 实现Contextual Retrieval（增强文本存储）
+   - 可选加入reranker提升精度
+
+4. 记忆管理阶段
+   - 实现生命周期管理（简单相似度聚类去重、时间衰减、冲突标记）
+   - 支持按Git分支切换频道（Channels）
+
+5. 高级优化阶段
+   - 用规则或可选本地LLM（Ollama）实现存储前摘要/去重（替代采样）
+   - 暴露资源（Resources）：项目摘要、ADR守栏等
+   - 实现架构守栏（违规时召回ADR）和任务链跟踪
+   - 最终Gemini CLI完整配置指导

@@ -159,6 +159,55 @@ def search_memory(query: str, top_k: int = 5) -> List[Dict]:
         logging.error(f"Search error: {e}")
         return []
 
+@app.tool("list_memories")
+def list_memories(limit: int = 10, offset: int = 0) -> List[Dict]:
+    """列出最近保存的记忆 (支持分页，默认返回最新的10条)"""
+    logging.info(f"Tool called: list_memories | Limit: {limit}, Offset: {offset}")
+    try:
+        results = []
+        if conn:
+            # 按 rowid 倒序排列，这样能看到最新的记忆
+            cursor = conn.execute(
+                "SELECT id, content, tags, note FROM memories ORDER BY rowid DESC LIMIT ? OFFSET ?", 
+                (limit, offset)
+            )
+            for row in cursor:
+                results.append({
+                    "id": row[0],
+                    "content": row[1],
+                    "tags": row[2].split() if row[2] else [],
+                    "note": row[3]
+                })
+        return results
+    except Exception as e:
+        logging.error(f"List memories error: {e}")
+        return []
+
+@app.tool("delete_memory")
+def delete_memory(memory_id: str) -> str:
+    """根据ID永久删除一条记忆"""
+    logging.info(f"Tool called: delete_memory | ID: {memory_id}")
+    try:
+        # 1. 删除 SQLite 记录
+        if conn:
+            conn.execute("DELETE FROM memories WHERE id = ?", (memory_id,))
+            conn.commit()
+            logging.info("Deleted from SQLite")
+
+        # 2. 删除 LanceDB 记录
+        if vector_table:
+            try:
+                # LanceDB 的删除语法：delete("SQL-like filter")
+                vector_table.delete(f"id = '{memory_id}'")
+                logging.info("Deleted from LanceDB")
+            except Exception as le:
+                logging.warning(f"LanceDB delete warning (might not exist): {le}")
+
+        return f"Memory {memory_id} deleted successfully."
+    except Exception as e:
+        logging.error(f"Delete error: {e}")
+        return f"Error deleting memory: {e}"
+
 if __name__ == "__main__":
     # 使用 SSE 模式启动
     # host="0.0.0.0" 允许外部连接，port=8000
