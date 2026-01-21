@@ -62,14 +62,17 @@ pip install fastmcp lancedb onnxruntime-gpu transformers numpy uvicorn
 *(Note: If you don't have a GPU, install `onnxruntime` instead of `onnxruntime-gpu`)*
 
 #### 4. Download the Embedding Model
-This project uses `BAAI/bge-m3` converted to ONNX. You need to download the model files into the `bge-m3-onnx` directory.
+This project uses `BAAI/bge-m3` converted to ONNX[here](https://huggingface.co/Xenova/bge-m3/tree/main). You need to download the model files into the `bge-m3-onnx` directory.
 
 You can use `huggingface-cli` or manually download these files:
-*   `sentence_transformers.onnx`
-*   `tokenizer.json`
-*   `tokenizer_config.json`
+*   `config.json`
+*   `model.onnx`
+*   `model.onnx_data`
 *   `vocab.txt`
-*   `special_tokens_map.json`
+*   `sentence_transformers.onnx`
+*   `sentence_transformers.onnx_data`
+*   `tokenizer_config.json`
+*   `tokenizer.json`
 
 Place them inside a folder named `bge-m3-onnx` in the project root.
 
@@ -195,14 +198,17 @@ pip install fastmcp lancedb onnxruntime-gpu transformers numpy uvicorn
 *（注：如果你没有 NVIDIA 显卡，请将 `onnxruntime-gpu` 替换为 `onnxruntime`）*
 
 #### 4. 下载嵌入模型 (Embedding Model)
-本项目使用 `BAAI/bge-m3` 的 ONNX 量化版本。你需要将模型文件下载到项目根目录下的 `bge-m3-onnx` 文件夹中。
+本项目使用 `BAAI/bge-m3` 的 ONNX 量化版本[here](https://huggingface.co/Xenova/bge-m3/tree/main)。你需要将模型文件下载到项目根目录下的 `bge-m3-onnx` 文件夹中。
 
 你可以使用 `huggingface-cli` 或手动下载以下文件：
-*   `sentence_transformers.onnx`
-*   `tokenizer.json`
-*   `tokenizer_config.json`
+*   `config.json`
+*   `model.onnx`
+*   `model.onnx_data`
 *   `vocab.txt`
-*   `special_tokens_map.json`
+*   `sentence_transformers.onnx`
+*   `sentence_transformers.onnx_data`
+*   `tokenizer_config.json`
+*   `tokenizer.json`
 
 确保它们都在 `bge-m3-onnx` 文件夹内。
 
