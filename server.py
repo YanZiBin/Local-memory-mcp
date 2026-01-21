@@ -39,4 +39,4 @@ def search_memory(query: str, top_k: int = 5) -> List[Dict]:
 
 # stdio模式启动
 if __name__ == "__main__":
-    app.run_stdio()
+    app.run()
