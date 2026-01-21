@@ -3,3 +3,4 @@
 __pycache__/ 
 *.pyc 
 .gemini-clipboard/
+bge-m3-onnx/
