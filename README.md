@@ -35,10 +35,10 @@ This is a **Memory Context Protocol (MCP)** server that gives your AI (like Gemi
 
 ### 🛠️ Prerequisites
 
-*   **OS:** Windows (tested), Linux, or macOS.
+*   **OS:** Windows (tested)
 *   **Python:** 3.10 or higher.
 *   **Hardware:** NVIDIA GPU recommended (for TensorRT/CUDA acceleration), but works on CPU.
-*   **MCP Client:** [Gemini CLI](https://github.com/google-gemini/gemini-cli) or [Claude Desktop](https://claude.ai/download).
+*   **MCP Client:** [Gemini CLI](https://github.com/google-gemini/gemini-cli) or [Claude Desktop](https://claude.ai/download).Or any IDE that can be configured with MCP.
 
 ### 🚀 Installation & Setup
 
@@ -168,10 +168,10 @@ We are currently at **Phase 2 (Persistence)**.
 
 ### 🛠️ 环境要求
 
-*   **操作系统：** Windows (已充分测试), Linux, 或 macOS。
+*   **操作系统：** Windows (已充分测试)
 *   **Python：** 3.10 或更高版本。
 *   **硬件：** 推荐使用 NVIDIA 显卡（以获得 TensorRT/CUDA 加速），但也支持 CPU 运行。
-*   **MCP 客户端：** [Gemini CLI](https://github.com/google-gemini/gemini-cli) 或 [Claude Desktop](https://claude.ai/download)。
+*   **MCP 客户端：** [Gemini CLI](https://github.com/google-gemini/gemini-cli) 或 [Claude Desktop](https://claude.ai/download)。或者任何可以配置mcp的IDE。
 
 ### 🚀 安装与配置指南
 
