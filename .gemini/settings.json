@@ -1,15 +1,8 @@
 {
   "mcpServers": {
     "local-memory": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--with",
-        "fastmcp",
-        "fastmcp",
-        "run",
-        "E:\\Yan.doument2\\programming exercises\\MCP\\local-memory-mcp\\server.py"
-      ]
+      "url": "http://localhost:8000/sse",
+      "type": "sse"
     }
   }
 }
