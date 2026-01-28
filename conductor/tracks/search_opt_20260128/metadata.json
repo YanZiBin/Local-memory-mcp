@@ -1,8 +1,8 @@
-﻿{
-  "track_id": "search_opt_20260128",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-01-28T13:40:00Z",
-  "updated_at": "2026-01-28T13:40:00Z",
-  "description": "Implement RRF fusion and similarity thresholds for hybrid search."
+{
+    "track_id":  "search_opt_20260128",
+    "type":  "feature",
+    "status":  "completed",
+    "created_at":  "2026-01-28T13:40:00Z",
+    "updated_at":  "2026-01-28T18:03:59Z",
+    "description":  "Implement RRF fusion and similarity thresholds for hybrid search."
 }
