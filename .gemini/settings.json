@@ -4,5 +4,8 @@
       "url": "http://localhost:8000/sse",
       "type": "sse"
     }
+  },
+  "skills": {
+    "disabled": []
   }
 }
