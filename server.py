@@ -66,20 +66,17 @@ conn.commit()
 
 logging.info(">>> All Resources Ready! Server is starting... <<<")
 
+# Initialize SearchService
+from search_engine import SearchService
 
-def embed(text: str) -> np.ndarray:
-    try:
-        inputs = tokenizer(text, padding=True, truncation=True, max_length=512, return_tensors="np")
-        inputs = {k: v.astype(np.int64) for k, v in inputs.items()} 
-        outputs = session.run(None, inputs)
-        embedding = outputs[0].mean(axis=1)[0]
-        norm = np.linalg.norm(embedding)
-        if norm > 0:
-            embedding = embedding / norm
-        return embedding.astype(np.float32)
-    except Exception as e:
-        logging.error(f"Embed error: {e}")
-        return np.zeros(1024, dtype=np.float32)
+search_service = SearchService(
+    session=session,
+    tokenizer=tokenizer,
+    vector_table=vector_table,
+    sqlite_conn=conn
+)
+
+
 
 # --- 定义 App (显式禁用 Redis 逻辑已在头部通过 env 实现) ---
 app = FastMCP(
@@ -103,7 +100,7 @@ def save_memory(content: str, tags: List[str] = None, note: str = "") -> str:
             conn.commit()
 
         # LanceDB
-        vector = embed(content)
+        vector = search_service.embed(content)
         if vector_table:
             vector_table.add([{
                 "vector": vector,
@@ -124,37 +121,9 @@ def search_memory(query: str, top_k: int = 5) -> List[Dict]:
     """搜索记忆"""
     logging.info(f"Tool called: search_memory | Query: {query}")
     try:
-        results = {}
-
-        # SQLite Search
-        if conn:
-            try:
-                for row in conn.execute(
-                    "SELECT id, content, tags, note FROM memories WHERE memories MATCH ? ORDER BY rank LIMIT ?",
-                    (f"{query}*", top_k * 2)
-                ):
-                    mid = row[0]
-                    results[mid] = {"id": mid, "content": row[1], "tags": row[2].split(), "note": row[3]}
-            except: pass
-
-        # LanceDB Search
-        if vector_table:
-            try:
-                query_vec = embed(query)
-                vec_hits = vector_table.search(query_vec).limit(top_k * 2).to_list()
-                for hit in vec_hits:
-                    mid = hit["id"]
-                    results[mid] = {
-                        "id": mid,
-                        "content": hit["content"],
-                        "tags": hit["tags"].split(),
-                        "note": hit["note"]
-                    }
-            except: pass
-        
-        final_results = list(results.values())[:top_k]
-        logging.info(f"Found {len(final_results)} results.")
-        return final_results
+        results = search_service.hybrid_search(query, top_k=top_k)
+        logging.info(f"Found {len(results)} results.")
+        return results
     except Exception as e:
         logging.error(f"Search error: {e}")
         return []
