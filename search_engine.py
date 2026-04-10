@@ -11,6 +11,7 @@ DEFAULT_TOP_K = 5
 DEFAULT_THRESHOLD = 0.7
 DEFAULT_RRF_K = 60
 FETCH_MULTIPLIER = 4
+DUPLICATE_THRESHOLD = 0.85  # Similarity threshold for duplicate detection
 
 
 class SearchService:
@@ -196,5 +197,53 @@ class SearchService:
                 }
         except Exception as e:
             logging.debug(f"Vector search error: {e}")
+        
+        return results
+
+    def find_similar(
+        self,
+        content: str,
+        threshold: float = DUPLICATE_THRESHOLD,
+        top_k: int = 5
+    ) -> List[Dict]:
+        """Find memories similar to the given content for duplicate detection.
+        
+        Args:
+            content: The content to check for duplicates.
+            threshold: Minimum similarity score to consider as duplicate (default 0.85).
+            top_k: Maximum number of similar memories to return.
+        
+        Returns:
+            List of similar memory dicts with id, content, tags, note, and similarity score.
+        """
+        results = []
+        
+        if not self._vector_table:
+            return results
+        
+        try:
+            query_vector = self.embed(content)
+            hits = self._vector_table.search(query_vector).limit(top_k).to_list()
+            
+            for hit in hits:
+                distance = hit.get("_distance", 1.0)
+                similarity = distance_to_similarity(distance)
+                
+                if similarity < threshold:
+                    continue
+                
+                results.append({
+                    "id": hit["id"],
+                    "content": hit["content"],
+                    "tags": hit["tags"].split() if hit["tags"] else [],
+                    "note": hit["note"],
+                    "similarity": round(similarity, 4)
+                })
+            
+            # Sort by similarity descending
+            results.sort(key=lambda x: x["similarity"], reverse=True)
+            
+        except Exception as e:
+            logging.debug(f"Find similar error: {e}")
         
         return results

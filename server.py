@@ -240,10 +240,38 @@ def _add_vector_memory(memory: Dict[str, Any], vector: np.ndarray) -> None:
 
 
 @app.tool("save_memory")
-def save_memory(content: str, tags: List[str] = None, note: str = "") -> str:
-    """Save a project memory."""
+def save_memory(
+    content: str,
+    tags: List[str] = None,
+    note: str = "",
+    skip_duplicate_check: bool = False
+) -> Dict[str, Any]:
+    """Save a project memory with optional duplicate detection.
+    
+    Args:
+        content: The memory content to save.
+        tags: Optional list of tags.
+        note: Optional note field.
+        skip_duplicate_check: If True, skip duplicate detection (default False).
+    
+    Returns:
+        A dict with status, memory_id, and optional duplicate warnings.
+    """
     logging.info(f"Tool called: save_memory | Content: {content[:20]}...")
     try:
+        # Step 1: Check for duplicates (unless skipped)
+        if not skip_duplicate_check:
+            similar_memories = search_service.find_similar(content)
+            if similar_memories:
+                # Found potential duplicates
+                return {
+                    "status": "duplicate_detected",
+                    "message": "Potential duplicate memories found. Review before saving.",
+                    "similar_memories": similar_memories,
+                    "action_required": "Review similar memories and decide whether to save anyway by setting skip_duplicate_check=true"
+                }
+        
+        # Step 2: Save the memory
         memory_id = str(uuid.uuid4())
         tags_str = _tags_to_string(tags or [])
 
@@ -267,10 +295,20 @@ def save_memory(content: str, tags: List[str] = None, note: str = "") -> str:
             }])
 
         logging.info(f"Success! Memory saved: {memory_id}")
-        return f"Memory saved with id: {memory_id}"
+        return {
+            "status": "saved",
+            "memory_id": memory_id,
+            "message": "Memory saved successfully.",
+            "content": content,
+            "tags": tags or [],
+            "note": note
+        }
     except Exception as e:
         logging.error(f"Error saving memory: {e}")
-        return f"Error: {e}"
+        return {
+            "status": "error",
+            "message": f"Error saving memory: {e}"
+        }
 
 
 @app.tool("update_memory")

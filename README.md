@@ -26,10 +26,11 @@ This is a **Memory Context Protocol (MCP)** server that gives your AI (like Gemi
 *   **Hybrid Search Architecture:** Combines **LanceDB** (Vector Search for semantic understanding) and **SQLite FTS5** (Full-Text Search for exact keyword matching) for high-precision recall.
 *   **Hardware Acceleration:** Powered by ONNX Runtime with TensorRT/CUDA execution providers for millisecond-level embedding generation.
 *   **Standard MCP Tools:**
-    *   `save_memory`: Store snippets, code, docs, or personal facts.
+    *   `save_memory`: Store snippets, code, docs, or personal facts (with automatic duplicate detection).
     *   `search_memory`: Semantic & keyword retrieval.
     *   `list_memories`: View recent entries.
     *   `delete_memory`: Manage and clean up data.
+    *   `update_memory`: Update existing memory by ID.
 *   **Lazy Loading:** Optimized startup time with on-demand resource initialization.
 *   **Zero Cost:** Runs entirely on your existing hardware.
 
@@ -51,8 +52,8 @@ cd Local-memory-mcp
 #### 2. Create a Python Environment (Conda Recommended)
 To ensure GPU libraries work correctly, Conda is highly recommended.
 ```bash
-conda create -n local-memory python=3.10
-conda activate local-memory
+conda create -n Local-memory-mcp python=3.10
+conda activate Local-memory-mcp
 ```
 
 #### 3. Install Dependencies
@@ -130,7 +131,8 @@ We are currently transitioning to **Phase 4 (Memory Management)**.
     - [ ] (Optional) Add Reranker for higher precision.
 
 - [ ] **Phase 4: Memory Management**
-    - [ ] Lifecycle management (Clustering deduplication, Time decay, Conflict tagging).
+    - [x] Duplicate detection on save (similarity-based).
+    - [ ] Lifecycle management (Time decay, Conflict tagging).
 
 - [ ] **Phase 5: Advanced Optimization**
     - [ ] Expose **Resources**: Project summaries, ADR (Architecture Decision Records) guardrails.
@@ -160,10 +162,11 @@ We are currently transitioning to **Phase 4 (Memory Management)**.
 *   **混合搜索架构：** 结合了 **LanceDB**（向量搜索，理解语义）和 **SQLite FTS5**（全文搜索，精准匹配关键词），并通过 **RRF (倒数排名融合)** 算法进行智能排序，确保召回率和准确率。
 *   **硬件加速：** 基于 ONNX Runtime 和 TensorRT/CUDA，充分释放本地显卡性能。
 *   **标准 MCP 工具集：**
-    *   `save_memory`: 保存代码片段、文档总结或个人事实。
+    *   `save_memory`: 保存代码片段、文档总结或个人事实（自动检测重复内容）。
     *   `search_memory`: 语义或关键词检索（支持相似度阈值过滤）。
     *   `list_memories`: 查看最近的记忆。
     *   `delete_memory`: 删除过时信息。
+    *   `update_memory`: 按 ID 更新现有记忆。
 *   **懒加载设计 (Lazy Loading)：** 优化启动流程，按需加载重型模型，拒绝卡顿。
 *   **零成本：** 以前需要付费购买的向量存储服务，现在免费运行在你自己的电脑上。
 
@@ -185,8 +188,8 @@ cd Local-memory-mcp
 #### 2. 创建 Python 环境 (强烈推荐 Conda)
 为了避免 CUDA 依赖冲突，建议使用 Conda。
 ```bash
-conda create -n local-memory python=3.10
-conda activate local-memory
+conda create -n Local-memory-mcp python=3.10
+conda activate Local-memory-mcp
 ```
 
 #### 3. 安装依赖库
@@ -264,7 +267,8 @@ pip install fastmcp lancedb onnxruntime-gpu transformers numpy uvicorn
     - [ ] （可选）加入 Reranker 重排序模型以提升精度。
 
 - [ ] **第四阶段：记忆管理**
-    - [ ] 实现生命周期管理（基于相似度的聚类去重、时间衰减、冲突标记）。
+    - [x] 保存时自动检测重复内容（基于相似度）
+    - [ ] 实现生命周期管理（时间衰减、冲突标记）。
 
 - [ ] **第五阶段：高级优化**
     - [ ] 暴露 **Resources**（资源）：项目摘要、ADR 架构决策记录守栏等。
